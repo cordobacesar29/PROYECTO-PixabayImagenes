@@ -38,18 +38,48 @@ function mostrarAlerta(mensaje) {
             alerta.remove();
         }, 3000);
     }
-   
-
 }
 
 function buscarImagenes(termino) {
     const key = '18691899-4401beccd0942ed1b2b16fb94';
-    const url = `https://pixabay.com/api/?key=${key}&q=${termino}`;
+    const url = `https://pixabay.com/api/?key=${key}&q=${termino}&per_page=100`;
 
     fetch(url)
         .then( respuesta => respuesta.json() )
         .then( resultado => {
             mostrarImagenes(resultado.hits);
-        })
-        
+        })    
+}
+function mostrarImagenes(imagenes) {
+    while( resultado.firstChild) {
+        resultado.removeChild(resultado.firstChild);
+    }
+
+    // iterar sobre el arreglo de imagenes y construir el HTML
+    imagenes.forEach( imagen => {
+        const { previewURL, likes, views, largeImageURL } = imagen;
+
+        resultado.innerHTML += `
+            <div class="w-1/2 md:w-1/2 lg:w-1/4 p-3 mb-4">
+                <div class="bg-white">
+                    
+                    <img class="w-full" src="${previewURL}">
+                    
+                    <div class="p-4">
+                        <p class="font-bold"> ${likes} <span class="font-light"> Me gusta </span></p>
+                        <p class="font-bold"> ${views} <span class="font-light"> Vistas </span></p> 
+
+                        <a 
+                            class=" block w-full bg-blue-800 hover:gb-blue-500 
+                                    text-white uppercase font-bold text-center rounded mt-5 p-1" 
+
+                            href="${largeImageURL}" target="_blank" rel="noopener noreferrer"
+                        >
+                        Ver Imagen
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `;
+    })
 }
